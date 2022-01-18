@@ -1,0 +1,25 @@
+{% extends "users/base.html" %}
+{% block content %}
+<div class="container mt-5 offset-2 col-8">
+    <div>
+      <form class="" action="{% url 'create' %}" method="POST">
+        {% csrf_token %} 
+        <div class="row">
+          <div class="col-12 p-2">
+            <label for="username" class="form-label">Opponents username:</label>
+            <div class="input-group">
+              <span class="input-group-text">@</span>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            </div>
+            <label for="side" class="form-label mt-4">Choose side:</label>
+            <select class="form-control", id="side" name="side">
+              <option>White</option>
+              <option>Black</option>
+            </select>
+          </div>
+          <button class="btn btn-primary ml-2 mt-4 bg-dark" type="submit">Create Game</button>
+        </div>
+      </form>
+    </div>
+</div>
+{% endblock content %}
