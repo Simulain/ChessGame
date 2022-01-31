@@ -6,6 +6,7 @@ from django.db.models import Q
 from chess.models import COMPLETED, Game
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -17,7 +18,6 @@ def register(request):
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
-
 
 @login_required
 def profile(request):
@@ -60,7 +60,6 @@ def profile(request):
         'games' : games
     }
     return render(request, 'users/profile.html', context)
-
 
 def test(request):
     return render(request, 'users/test.html')

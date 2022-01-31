@@ -28,17 +28,15 @@ class create(View):
             messages.error(request, f'The user could not be found! Try again.')
             return render(request, 'chess/create.html')
 
-
 def multiplayer(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
     return render(request, 'chess/multiplayer.html', {"game_id" : game_id})
-
 
 def home(request):
     return render(request, 'chess/home.html')
 
 def about(request):
-    return render(request, 'chess/home.html')
+    return render(request, 'chess/about.html')
 
 def ongoing(request):
     games = []

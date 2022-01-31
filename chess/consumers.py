@@ -15,12 +15,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
         await self.join_room(join_data)
         
-
-    async def disconnect(self, code):
-        user = self.scope['user']
-        pass
-
-
     async def receive_json(self, content, **kwargs):
         print(f"{self.game_id} received json: ", content)
         command = content['gameCommand']
@@ -29,7 +23,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_new_move(content)
         elif command == 'gameOver':
             await self.game_over(content['winner'])
-
 
     async def join_room(self, join_data):
         pgn = join_data[0]

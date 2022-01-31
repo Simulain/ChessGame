@@ -1,12 +1,12 @@
 {% extends "users/base.html" %}
 {% block content %}
-<div class="cover-container d-flex h-100 p-3 text-center flex-column">
-    <img class="mx-auto d-block" width="200" height="200" src="/static/chess/ChessLogo.png">
-    <main role="main" class="inner cover mx-auto">
-        <p class="lead">Challenge someone to a game!</p>
-        <p class="lead">
-            <a href="{% url 'create' %}" class="btn btn-lg btn-secondary bg-dark">Create a game</a>
-        </p>
-    </main>
-</div>
+    <div class="cover-container d-flex h-100 p-3 text-center flex-column">
+        <img class="mx-auto d-block" width="200" height="200" src="/static/chess/ChessLogo.png">
+        <main role="main" class="inner cover mx-auto">
+            <p class="lead">Challenge someone to a game!</p>
+            <p class="lead">
+                <a href="{% url 'create' %}" class="btn btn-lg btn-secondary bg-dark">Create a game</a>
+            </p>
+        </main>
+    </div>
 {% endblock content %}
