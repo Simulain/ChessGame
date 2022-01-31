@@ -7,4 +7,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('multi/<int:game_id>', views.multiplayer, name='chess-multi'),
     path('creategame/', views.create.as_view(), name='create'),
+    path('ongoing/', views.ongoing, name="ongoing"),
 ]

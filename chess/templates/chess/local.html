@@ -2,198 +2,194 @@
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHESS GAME TEST</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CHESS GAME TEST</title>
 
-    <!--Chess CDNs-->
-    <link rel="stylesheet" 
-          href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-          integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" 
-          crossorigin="anonymous">
+        <!--Chess CDNs-->
+        <link rel="stylesheet" 
+            href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+            integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" 
+            crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-            integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
-            crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+                integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+                crossorigin="anonymous"></script>
 
-    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-            integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-            crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+                integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
+                crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"
-            integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" 
-            crossorigin="anonymous"></script>
-</head>
-<body>
-    <div id="myBoard" style="width: 400px; margin-left: auto; margin-right: auto;"></div>
-    <label>Status:</label>
-    <div id="status"></div>
-    <label>FEN:</label>
-    <div id="fen"></div>
-    <label>PGN:</label>
-    <div id="pgn"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"
+                integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" 
+                crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="myBoard" style="width: 400px; margin-left: auto; margin-right: auto;"></div>
+        <label>Status:</label>
+        <div id="status"></div>
+        <label>FEN:</label>
+        <div id="fen"></div>
+        <label>PGN:</label>
+        <div id="pgn"></div>
 
-    <style type="text/css">
-        .highlight-white {
-          box-shadow: inset 0 0 3px 3px yellow;
-        }
-        .highlight-black {
-          box-shadow: inset 0 0 3px 3px blue;
-        }
-        </style>
+        <style type="text/css">
+            .highlight-white {
+            box-shadow: inset 0 0 3px 3px yellow;
+            }
+            .highlight-black {
+            box-shadow: inset 0 0 3px 3px blue;
+            }
+            </style>
 
-    <script>
-        var board = null
-        var game = new Chess()
+        <script>
+            var board = null
+            var game = new Chess()
 
-        var $status = $('#status')
-        var $fen = $('#fen')
-        var $pgn = $('#pgn')
+            var $status = $('#status')
+            var $fen = $('#fen')
+            var $pgn = $('#pgn')
 
-        var highlightColorBlack = '#6BA432'
-        var highlightColorWhite = '#AAD481'
+            var highlightColorBlack = '#6BA432'
+            var highlightColorWhite = '#AAD481'
 
-        // chessboard.js classes
-        var squareClass = 'square-55d63'
-        var blackClass = 'black-3c85d'
-        var whiteClass = 'white-1e1d7'
+            // chessboard.js classes
+            var squareClass = 'square-55d63'
+            var blackClass = 'black-3c85d'
+            var whiteClass = 'white-1e1d7'
 
-        function removeHighlightPossible () {
-            $('#myBoard .' + squareClass).css('background', '')
-        }
-
-        function removeHighlightPrevious (color) {
-            $('#myBoard').find('.' + squareClass).removeClass('highlight-' + color)
-        }
-
-        function highlightPossible (square) {
-            var $square = $('#myBoard .square-' + square)
-
-            var background = highlightColorWhite
-            if ($square.hasClass(blackClass)) {
-                background = highlightColorBlack
+            // Highlighting functions
+            function removeHighlightPossible () {
+                $('#myBoard .' + squareClass).css('background', '')
             }
 
-            $square.css('background', background)
-        }
-
-
-
-        function onDragStart (source, piece, position, orientation) {
-            // do not pick up pieces if the game is over
-            if (game.game_over()) return false
-
-            // only pick up pieces for the side to move
-            if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-                (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-                return false
+            function removeHighlightPrevious (color) {
+                $('#myBoard').find('.' + squareClass).removeClass('highlight-' + color)
             }
 
-            var moves = game.moves({
-                square: source,
-                verbose: true
-            })
+            function highlightPossible (square) {
+                var $square = $('#myBoard .square-' + square)
 
-            if (moves.length == 0) return;
+                var background = highlightColorWhite
+                if ($square.hasClass(blackClass)) {
+                    background = highlightColorBlack
+                }
 
-            // highlight the origin  TODO: different color for origin
-            highlightPossible(source)
-
-            // highlight possible moves
-            for (let i = 0; i < moves.length; i++) {
-                highlightPossible(moves[i].to)
+                $square.css('background', background)
             }
 
-        }
+            // Chessboard.js functions
+            function onDragStart (source, piece, position, orientation) {
+                // do not pick up pieces if the game is over
+                if (game.game_over()) return false
 
-        function onDrop (source, target) {
-            removeHighlightPossible()
+                // only pick up pieces for the side to move
+                if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+                    (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+                    return false
+                }
 
-            // see if the move is legal
-            var move = game.move({
-                from: source,
-                to: target,
-                promotion: 'q' 
-            })
+                var moves = game.moves({
+                    square: source,
+                    verbose: true
+                })
 
-            // illegal move
-            if (move === null) return 'snapback'
+                if (moves.length == 0) return;
 
-            // NOTE: turn has already changed
-            var color = 'white'
-            var highlight = 'highlight-white'
-            if (game.turn() == 'w'){
-                var color = 'black'
-                var highlight = 'highlight-black'
+                // highlight the origin  TODO: different color for origin
+                highlightPossible(source)
+
+                // highlight possible moves
+                for (let i = 0; i < moves.length; i++) {
+                    highlightPossible(moves[i].to)
+                }
+
             }
 
-            // Update previous move highlighting
-            removeHighlightPrevious(color)
-            $('#myBoard').find('.square-' + source).addClass(highlight)
-            $('#myBoard').find('.square-' + target).addClass(highlight)
+            function onDrop (source, target) {
+                removeHighlightPossible()
+
+                // see if the move is legal
+                var move = game.move({
+                    from: source,
+                    to: target,
+                    promotion: 'q' 
+                })
+
+                // illegal move
+                if (move === null) return 'snapback'
+
+                // NOTE: turn has already changed
+                var color = 'white'
+                var highlight = 'highlight-white'
+                if (game.turn() == 'w'){
+                    var color = 'black'
+                    var highlight = 'highlight-black'
+                }
+
+                // Update previous move highlighting
+                removeHighlightPrevious(color)
+                $('#myBoard').find('.square-' + source).addClass(highlight)
+                $('#myBoard').find('.square-' + target).addClass(highlight)
+
+                updateStatus()
+            }
+
+            // update the board position after the piece snap
+            // for castling, en passant, pawn promotion
+            function onSnapEnd () {
+                board.position(game.fen())
+            }
+
+            function updateStatus () {
+                var status = ''
+
+                var moveColor = 'White'
+                if (game.turn() === 'b') {
+                    moveColor = 'Black'
+                }
+
+                // checkmate
+                if (game.in_checkmate()) {
+                    status = 'Game over, ' + moveColor + ' is in checkmate.'
+                }
+
+                // draw
+                else if (game.in_draw()) {
+                    status = 'Game over, drawn position'
+                }
+
+                // game still on
+                else {
+                    status = moveColor + ' to move'
+
+                    // check
+                    if (game.in_check()) {
+                    status += ', ' + moveColor + ' is in check'
+                    }
+            }
+
+            $status.html(status)
+            $fen.html(game.fen())
+            $pgn.html(game.pgn())
+            }
+
+            var config = {
+                draggable: true,
+                dropOffBoard: 'snapback',
+                onDragStart: onDragStart,
+                onDrop: onDrop,
+                onSnapEnd: onSnapEnd,
+                pieceTheme: '/static/chess/pieces/{piece}.png',
+                position: 'start'
+            }
+
+            board = Chessboard('myBoard', config)
 
             updateStatus()
-        }
-
-        // update the board position after the piece snap
-        // for castling, en passant, pawn promotion
-        function onSnapEnd () {
-            board.position(game.fen())
-        }
-
-        function updateStatus () {
-            var status = ''
-
-            var moveColor = 'White'
-            if (game.turn() === 'b') {
-                moveColor = 'Black'
-            }
-
-            // checkmate
-            if (game.in_checkmate()) {
-                status = 'Game over, ' + moveColor + ' is in checkmate.'
-            }
-
-            // draw
-            else if (game.in_draw()) {
-                status = 'Game over, drawn position'
-            }
-
-            // game still on
-            else {
-                status = moveColor + ' to move'
-
-                // check
-                if (game.in_check()) {
-                status += ', ' + moveColor + ' is in check'
-                }
-        }
-
-        $status.html(status)
-        $fen.html(game.fen())
-        $pgn.html(game.pgn())
-        }
-
-        var config = {
-            draggable: true,
-            dropOffBoard: 'snapback',
-            onDragStart: onDragStart,
-            onDrop: onDrop,
-            onSnapEnd: onSnapEnd,
-            pieceTheme: '/static/chess/pieces/{piece}.png',
-            position: 'start'
-        }
-
-        board = Chessboard('myBoard', config)
-
-        updateStatus()
-
-
-    </script>
-    
-
-</body>
+        </script>
+    </body>
 </html>
 {% endblock content %}

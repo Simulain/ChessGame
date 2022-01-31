@@ -28,10 +28,11 @@
             <article class="media content-section col-md-4 mx-4">
                 <div class="media-body">
                     <div class="article-metadata">
-                        <label for="opponent" class="label">Opponent:</label>
-                        <a id="opponent" href="#">{{ g.game.opponent.username }}</a>
+                        <label for="opponent" class="label">Game ID:</label>
+                        <a id="opponent" href="{{g.link}}">{{ g.game.pk }}</a>
                     </div>
                     <div class="card-body">
+                        <h6 class="card-text">Opponent: {{ g.opponent }} </h6>
                         <h6 class="card-text">Side: {{ g.side }} </h6>
                         <h6 class="card-text">Result: {{ g.result_text }} </h6>
                     </div>

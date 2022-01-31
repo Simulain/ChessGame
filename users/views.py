@@ -36,20 +36,23 @@ def profile(request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
     games = []
-    all = Game.objects.filter(Q(host=request.user) | Q(opponent=request.user)).filter(status=COMPLETED)
+    all = Game.objects.filter(Q(host=request.user) | Q(opponent=request.user)).filter(status=COMPLETED).order_by('-id')
     for game in all:
         game_info = {}
 
         game_info['game'] = game
+        game_info['link'] = f"/multi/{game.id}"
         game_info['side'] = determine_side(game, request.user)
+
+        game_info['opponent'] = game.opponent
+        if game.host != request.user:
+            game_info['opponent'] = game.host
 
         game_info['result_text'] = "You Won!"
         if game.winner != request.user:
             game_info['result_text'] = "You Lost!"
 
-
         games.append(game_info)
-
 
     context = {
         'u_form': u_form,
@@ -64,7 +67,6 @@ def test(request):
 
 
 # Helper functions
-
 def determine_side(game, user):
     if user == game.host:
         if game.host_white:

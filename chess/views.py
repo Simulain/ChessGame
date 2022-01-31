@@ -2,12 +2,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.db.models import Q
 from django.views import View
-from .models import Game
-
-def chessGame(request):
-    return render(request, 'chess/game.html')
+from .models import COMPLETED, Game
 
 
 class create(View):
@@ -42,3 +39,35 @@ def home(request):
 
 def about(request):
     return render(request, 'chess/home.html')
+
+def ongoing(request):
+    games = []
+    all = Game.objects.filter(Q(host=request.user) | Q(opponent=request.user)).filter(~Q(status=COMPLETED)).order_by('-id')
+    for game in all:
+        game_info = {}
+
+        game_info['game'] = game
+        game_info['link'] = f"/multi/{game.id}"
+        game_info['side'] = determine_side(game, request.user)
+
+        game_info['opponent'] = game.opponent
+        if game.host != request.user:
+            game_info['opponent'] = game.host
+
+        games.append(game_info)
+
+    return render(request, 'chess/ongoing.html', {'games' : games})
+
+
+# Helper functions
+def determine_side(game, user):
+    if user == game.host:
+        if game.host_white:
+            return 'White'
+        else:
+            return 'Black'
+    else:
+        if game.host_white:
+            return 'Black'
+        else:
+            return 'White'
