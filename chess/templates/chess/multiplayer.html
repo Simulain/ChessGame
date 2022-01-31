@@ -102,13 +102,21 @@
                 // NOTE: turn has already changed
                 var color = 'white'
                 var highlight = 'highlight-white'
+                var targetHighlight = 'highlight-black'
+
+
                 if (game.turn() == 'w'){
                     var color = 'black'
                     var highlight = 'highlight-black'
+                    var targetHighlight = 'highlight-white'
                 }
 
                 // Update previous move highlighting
                 removeHighlightPrevious(color)
+
+                // Remove opposing highlights from target square
+                $('#myBoard').find('.square-' + target).removeClass(targetHighlight)
+
                 $('#myBoard').find('.square-' + source).addClass(highlight)
                 $('#myBoard').find('.square-' + target).addClass(highlight)
             }

@@ -22,7 +22,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
 
     async def receive_json(self, content, **kwargs):
-        print(f"{self.channel_name} received json: ", content)
+        print(f"{self.game_id} received json: ", content)
         command = content['gameCommand']
         
         if command == 'newMove':

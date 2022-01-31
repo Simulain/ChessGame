@@ -40,5 +40,5 @@ def multiplayer(request, game_id):
 def home(request):
     return render(request, 'chess/home.html')
 
-def start(request):
-    return render(request, 'chess/start.html')
+def about(request):
+    return render(request, 'chess/home.html')
